@@ -119,18 +119,12 @@ class UAgent
 
     private static function get_language( $lang = array() )
     {
-        $a = ( empty( $lang ) ? self::$languages : $lang );
-        $i = array_rand( $a, 1 );
-
-        return $a[$i];
+        return self::array_random( empty( $lang ) ? self::$languages : $lang );
     }
 
     private static function get_processor( $os )
     {
-        $a = self::$processors[$os];
-        $i = array_rand( $a, 1 );
-
-        return $a[$i];
+        return self::array_random( self::$processors[$os] );
     }
 
     private static function get_version_nt()
@@ -179,9 +173,9 @@ class UAgent
             '3.5.30729',
         );
 
-        $i = array_rand( $frameworks, 1 );
+        $rev = '.' . mt_rand( 26, 648 );
 
-        return $frameworks[$i] . '.' . mt_rand( 26, 648 );
+        return self::array_random( $frameworks ) . $rev;
     }
 
     private static function get_version_safari()
@@ -237,7 +231,6 @@ class UAgent
      * Safari
      *
      */
-
     public static function safari( $arch )
     {
         $version = ' Version/' . self::get_version_safari();
