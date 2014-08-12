@@ -337,28 +337,6 @@ class UAgent
         // and is common to almost every browser today.
         $ua = 'Mozilla/5.0 ' . call_user_func( 'UAgent::' . $browser, $os );
 
-        /*
-        switch ( $browser )
-        {
-            case 'firefox':
-                $ua .= self::firefox( $os );
-                break;
-            case 'iexplorer':
-                $ua .= self::iexplorer( $os );
-                break;
-            case 'chrome':
-                $ua .= self::chrome( $os );
-                break;
-            case 'safari':
-                $ua .= self::safari( $os );
-                break;
-            case 'opera':
-                // NOTE: Opera doesn't begin with the Mozilla/5.0 token.
-                $ua = 'Opera/' . rand( 8, 9 ) . '.' . rand( 10, 99 ) . ' ' . opera( $os );
-                break;
-        }
-        */
-
         $tags = array(
             '{proc}' => self::get_processor( $os ),
             '{lang}' => self::get_language( $lang ),

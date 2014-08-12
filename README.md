@@ -17,11 +17,12 @@ randomly choose from.
 
 Browsers
 ---------
+
 * Chrome
 * Firefox: [Gecko User Agent String Reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Gecko_user_agent_string_reference)
 * Internet Explorer: [Understanding User-Agent Strings](http://msdn.microsoft.com/en-gb/library/ms537503(v=vs.85).aspx)
 * Safari
-* Opera [Opera User Agent Strings: Opera 15 and Beyond](http://dev.opera.com/blog/opera-user-agent-strings-opera-15-and-beyond/)
+* Opera: [Opera User Agent Strings: Opera 15 and Beyond](http://dev.opera.com/blog/opera-user-agent-strings-opera-15-and-beyond/)
 
 
 Known Limitations
