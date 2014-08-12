@@ -3,13 +3,17 @@
  * User Agent Generator
  * @version 1.0
  * @link https://github.com/Dreyer/random-uagent
- * @author @Dreyer
+ * @author Dreyer
  */
 
 class UAgent
 {
+    // General token that says the browser is Mozilla compatible, 
+    // and is common to almost every browser today.
+    const MOZILLA = 'Mozilla/5.0 ';
+
     /**
-     *
+     * Processors by Arch.
      */
     public static $processors = array(
         'lin' => array( 'i686', 'x86_64' ),
@@ -18,9 +22,11 @@ class UAgent
     );
 
     /**
-     *
+     * Browsers
+     * 
+     * Weighting is based on market share to determine frequency.
      */
-    public static $market = array(
+    public static $browsers = array(
         34 => array(
             89 => array( 'chrome', 'win' ),
             9  => array( 'chrome', 'mac' ),
@@ -71,14 +77,16 @@ class UAgent
     );    
 
     /**
-     * 
+     * Generate Device Platform
+     *
+     * Uses a random result with a weighting related to frequencies.
      */
-    public static function generate_device()
+    public static function generate_platform()
     {
         $rand = mt_rand( 1, 100 );
         $sum = 0;
 
-        foreach ( self::$market as $share => $freq_os )
+        foreach ( self::$browsers as $share => $freq_os )
         {
             $sum += $share;
 
@@ -99,7 +107,7 @@ class UAgent
             }
         }
 
-        throw new Exception( 'Market Share Total No100.' );
+        throw new Exception( 'Sum of $browsers frequency is not 100.' );
     }
 
     private static function array_random( $array )
@@ -178,13 +186,13 @@ class UAgent
 
     private static function get_version_safari()
     {
-        if ( rand( 0, 1 ) == 0 )
+        if ( mt_rand( 0, 1 ) == 0 )
         {
-            $ver = rand( 4, 5 ) . '.' . rand( 0, 1 );
+            $ver = mt_rand( 4, 5 ) . '.' . mt_rand( 0, 1 );
         }
         else
         {
-            $ver = rand( 4, 5 ) . '.0.' . rand( 1, 5 );
+            $ver = mt_rand( 4, 5 ) . '.0.' . mt_rand( 1, 5 );
         }
 
         return $ver;
@@ -329,13 +337,16 @@ class UAgent
         }
     }
 
-    public static function random( $lang = array( 'en-US', 'en-GB' ) )
+    public static function random( $lang = array( 'en-US' ) )
     {
-        list( $browser, $os ) = self::generate_device();
+        list( $browser, $os ) = self::generate_platform();
 
-        // General token that says the browser is Mozilla compatible, 
-        // and is common to almost every browser today.
-        $ua = 'Mozilla/5.0 ' . call_user_func( 'UAgent::' . $browser, $os );
+        return self::generate( $browser, $os, $lang );
+    }
+
+    public static function generate( $browser = 'chrome', $os = 'win', $lang = array( 'en-US' ) )
+    {
+        $ua = self::MOZILLA . call_user_func( 'UAgent::' . $browser, $os );
 
         $tags = array(
             '{proc}' => self::get_processor( $os ),

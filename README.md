@@ -8,12 +8,14 @@ Numbers for more minor variable components of the User-Agent for each browser
 are chosen randomly, so it may at times generate User-Agents that never actually 
 exist in the wild.
 
+
 Usage
 -----
 
 Simply require `uagent.php` and call the function `UAgent::random()`. You may
 optionally pass a single parameter consisting of an array of language codes to
 randomly choose from.
+
 
 Browsers
 ---------
