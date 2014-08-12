@@ -1,142 +1,372 @@
 <?php
 /**
- * Random user agent creator
- * @since Sep 4, 2011
+ * User Agent Generator
  * @version 1.0
- * @link http://360percents.com/
- * @author Luka Pušić <pusic93@gmail.com>
+ * @link https://github.com/Dreyer/random-uagent
+ * @author @Dreyer
  */
 
-/**
- * Possible processors on Linux
- */
-$linux_proc = array(
-    'i686',
-    'x86_64'
-);
-/**
- * Mac processors (i also added U;)
- */
-$mac_proc = array(
-    'Intel',
-    'PPC',
-    'U; Intel',
-    'U; PPC'
-);
-
-/**
- * Add as many languages as you like.
- */
-$lang = array(
-    'en-US',
-    'sl-SI'
-);
-
-function firefox() {
-    global $linux_proc, $mac_proc, $lang;
-
-    $ver = array(
-	'Gecko/' . date('Ymd', rand(strtotime('2011-1-1'), mktime())) . ' Firefox/' . rand(5, 7) . '.0',
-	'Gecko/' . date('Ymd', rand(strtotime('2011-1-1'), mktime())) . ' Firefox/' . rand(5, 7) . '.0.1',
-	'Gecko/' . date('Ymd', rand(strtotime('2010-1-1'), mktime())) . ' Firefox/3.6.' . rand(1, 20),
-	'Gecko/' . date('Ymd', rand(strtotime('2010-1-1'), mktime())) . ' Firefox/3.8'
+class UAgent
+{
+    /**
+     *
+     */
+    public static $processors = array(
+        'lin' => array( 'i686', 'x86_64' ),
+        'mac' => array( 'Intel', 'PPC', 'U; Intel', 'U; PPC' ),
+        'win' => array( 'foo' )
     );
 
-    $platforms = array(
-	'(Windows NT ' . rand(5, 6) . '.' . rand(0, 1) . '; ' . $lang[array_rand($lang, 1)] . '; rv:1.9.' . rand(0, 2) . '.20) ' . $ver[array_rand($ver, 1)],
-	'(X11; Linux ' . $linux_proc[array_rand($linux_proc, 1)] . '; rv:' . rand(5, 7) . '.0) ' . $ver[array_rand($ver, 1)],
-	'(Macintosh; ' . $mac_proc[array_rand($mac_proc, 1)] . ' Mac OS X 10_' . rand(5, 7) . '_' . rand(0, 9) . ' rv:' . rand(2, 6) . '.0) ' . $ver[array_rand($ver, 1)]
+    /**
+     *
+     */
+    public static $market = array(
+        34 => array(
+            89 => array( 'chrome', 'win' ),
+            9  => array( 'chrome', 'mac' ),
+            2  => array( 'chrome', 'lin' )
+        ),
+        32 => array(
+            100 => array( 'iexplorer', 'win' )
+        ),
+        25 => array(
+            83 => array( 'firefox', 'win' ),
+            16 => array( 'firefox', 'mac' ),
+            1  => array( 'firefox', 'lin' )
+        ),
+        7 => array(
+            95 => array( 'safari', 'mac' ),
+            4  => array( 'safari', 'win' ),
+            1  => array( 'safari', 'lin' )
+        ),
+        2 => array(
+            91 => array( 'opera', 'win' ),
+            6  => array( 'opera', 'lin' ),
+            3  => array( 'opera', 'mac' )
+        )
     );
 
-    return $platforms[array_rand($platforms, 1)];
-}
+    /**
+     * List of Lanuge Culture Codes (ISO 639-1)
+     *
+     * @see: http://msdn.microsoft.com/en-gb/library/ee825488(v=cs.20).aspx
+     */
+    public static $languages = array(
+        'af-ZA', 'ar-AE', 'ar-BH', 'ar-DZ', 'ar-EG', 'ar-IQ', 'ar-JO', 'ar-KW', 'ar-LB',
+        'ar-LY', 'ar-MA', 'ar-OM', 'ar-QA', 'ar-SA', 'ar-SY', 'ar-TN', 'ar-YE', 'be-BY',
+        'bg-BG', 'ca-ES', 'cs-CZ', 'Cy-az-AZ', 'Cy-sr-SP', 'Cy-uz-UZ', 'da-DK', 'de-AT',
+        'de-CH', 'de-DE', 'de-LI', 'de-LU', 'div-MV', 'el-GR', 'en-AU', 'en-BZ', 'en-CA', 
+        'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 
+        'en-ZW', 'es-AR', 'es-BO', 'es-CL', 'es-CO',  'es-CR', 'es-DO', 'es-EC', 'es-ES',
+        'es-GT', 'es-HN', 'es-MX', 'es-NI', 'es-PA', 'es-PE', 'es-PR', 'es-PY', 'es-SV',
+        'es-UY', 'es-VE', 'et-EE', 'eu-ES', 'fa-IR', 'fi-FI', 'fo-FO', 'fr-BE', 'fr-CA',
+        'fr-CH', 'fr-FR', 'fr-LU', 'fr-MC', 'gl-ES', 'gu-IN', 'he-IL', 'hi-IN', 'hr-HR', 
+        'hu-HU', 'hy-AM', 'id-ID', 'is-IS', 'it-CH', 'it-IT', 'ja-JP', 'ka-GE', 'kk-KZ',
+        'kn-IN', 'kok-IN', 'ko-KR', 'ky-KZ', 'Lt-az-AZ', 'lt-LT', 'Lt-sr-SP', 'Lt-uz-UZ', 
+        'lv-LV', 'mk-MK', 'mn-MN', 'mr-IN', 'ms-BN', 'ms-MY', 'nb-NO', 'nl-BE', 'nl-NL', 
+        'nn-NO', 'pa-IN', 'pl-PL', 'pt-BR', 'pt-PT', 'ro-RO', 'ru-RU', 'sa-IN', 'sk-SK', 
+        'sl-SI', 'sq-AL', 'sv-FI', 'sv-SE', 'sw-KE', 'syr-SY', 'ta-IN', 'te-IN', 'th-TH', 
+        'tr-TR', 'tt-RU', 'uk-UA', 'ur-PK', 'vi-VN', 'zh-CHS', 'zh-CHT', 'zh-CN', 'zh-HK', 
+        'zh-MO', 'zh-SG', 'zh-TW',   
+    );    
 
-function safari() {
-    global $linux_proc, $mac_proc, $lang;
+    /**
+     * 
+     */
+    public static function generate_device()
+    {
+        $rand = mt_rand( 1, 100 );
+        $sum = 0;
 
-    $saf = rand(531, 535) . '.' . rand(1, 50) . '.' . rand(1, 7);
-    if (rand(0, 1) == 0) {
-	$ver = rand(4, 5) . '.' . rand(0, 1);
-    } else {
-	$ver = rand(4, 5) . '.0.' . rand(1, 5);
+        foreach ( self::$market as $share => $freq_os )
+        {
+            $sum += $share;
+
+            if ( $rand <= $sum )
+            {
+                $rand = mt_rand( 1, 100 );
+                $sum = 0;
+
+                foreach ( $freq_os as $share => $choice )
+                {
+                    $sum += $share;
+
+                    if ( $rand <= $sum )
+                    {
+                        return $choice;
+                    }
+                }
+            }
+        }
+
+        throw new Exception( 'Market Share Total No100.' );
     }
 
-    $platforms = array(
-	'(Windows; U; Windows NT ' . rand(5, 6) . '.' . rand(0, 1) . ") AppleWebKit/$saf (KHTML, like Gecko) Version/$ver Safari/$saf",
-	'(Macintosh; U; ' . $mac_proc[array_rand($mac_proc, 1)] . ' Mac OS X 10_' . rand(5, 7) . '_' . rand(0, 9) . ' rv:' . rand(2, 6) . '.0; ' . $lang[array_rand($lang, 1)] . ") AppleWebKit/$saf (KHTML, like Gecko) Version/$ver Safari/$saf",
-	'(iPod; U; CPU iPhone OS ' . rand(3, 4) . '_' . rand(0, 3) . ' like Mac OS X; ' . $lang[array_rand($lang, 1)] . ") AppleWebKit/$saf (KHTML, like Gecko) Version/" . rand(3, 4) . ".0.5 Mobile/8B" . rand(111, 119) . " Safari/6$saf",
-    );
+    private static function array_random( $array )
+    {
+        $i = array_rand( $array, 1 );
 
-    return $platforms[array_rand($platforms, 1)];
-}
+        return $array[$i];
+    }
 
-function iexplorer() {
-    $ie_extra = array(
-	'',
-	'; .NET CLR 1.1.' . rand(4320, 4325) . '',
-	'; WOW64'
-    );
-    $platforms = array(
-	'(compatible; MSIE ' . rand(5, 9) . '.0; Windows NT ' . rand(5, 6) . '.' . rand(0, 1) . '; Trident/' . rand(3, 5) . '.' . rand(0, 1) . ')'
-    );
+    private static function get_language( $lang = array() )
+    {
+        $a = ( empty( $lang ) ? self::$languages : $lang );
+        $i = array_rand( $a, 1 );
 
-    return $platforms[array_rand($platforms, 1)];
-}
+        return $a[$i];
+    }
 
-function opera() {
-    global $linux_proc, $lang;
+    private static function get_processor( $os )
+    {
+        $a = self::$processors[$os];
+        $i = array_rand( $a, 1 );
 
-    $op_extra = array(
-	'',
-	'; .NET CLR 1.1.' . rand(4320, 4325) . '',
-	'; WOW64'
-    );
-    $platforms = array(
-	'(X11; Linux ' . $linux_proc[array_rand($linux_proc, 1)] . '; U; ' . $lang[array_rand($lang, 1)] . ') Presto/2.9.' . rand(160, 190) . ' Version/' . rand(10, 12) . '.00',
-	'(Windows NT ' . rand(5, 6) . '.' . rand(0, 1) . '; U; ' . $lang[array_rand($lang, 1)] . ') Presto/2.9.' . rand(160, 190) . ' Version/' . rand(10, 12) . '.00'
-    );
+        return $a[$i];
+    }
 
-    return $platforms[array_rand($platforms, 1)];
-}
+    private static function get_version_nt()
+    {   
+        // Win2k (5.0) to Win 7 (6.1).
+        return mt_rand( 5, 6 ) . '.' . mt_rand( 0, 1 );
+    }
 
-function chrome() {
-    global $linux_proc, $mac_proc;
+    private static function get_version_osx()
+    {
+        return '10_' . mt_rand( 5, 7 ) . '_' . mt_rand( 0, 9 );
+    }
 
-    $saf = rand(531, 536) . rand(0, 2);
+    private static function get_version_webkit()
+    {
+        return mt_rand( 531, 536 ) . mt_rand( 0, 2 );
+    }
 
-    $platforms = array(
-	'(X11; Linux ' . $linux_proc[array_rand($linux_proc, 1)] . ") AppleWebKit/$saf (KHTML, like Gecko) Chrome/" . rand(13, 15) . '.0.' . rand(800, 899) . ".0 Safari/$saf",
-	'(Windows NT ' . rand(5, 6) . '.' . rand(0, 1) . ") AppleWebKit/$saf (KHTML, like Gecko) Chrome/" . rand(13, 15) . '.0.' . rand(800, 899) . ".0 Safari/$saf",
-	'(Macintosh; U; ' . $mac_proc[array_rand($mac_proc, 1)] . ' Mac OS X 10_' . rand(5, 7) . '_' . rand(0, 9) . ") AppleWebKit/$saf (KHTML, like Gecko) Chrome/" . rand(13, 15) . '.0.' . rand(800, 899) . ".0 Safari/$saf"
-    );
+    private static function get_verison_chrome()
+    {
+        return mt_rand( 13, 15 ) . '.0.' . mt_rand( 800, 899 ) . '.0';
+    }
 
-    return $platforms[array_rand($platforms, 1)];
-}
+    private static function get_version_gecko()
+    {
+        return mt_rand( 17, 31 ) . '.0';
+    }
 
-/**
- * Main function which will choose random browser
- * @return string user agent
- */
-function random_uagent() {
-    $x = rand(1, 5);
-    switch ($x) {
-	case 1:
-	    echo "Mozilla/5.0 " . firefox() . "\n";
-	    break;
-	case 2:
-	    echo "Mozilla/5.0 " . safari() . "\n";
-	    break;
-	case 3:
-	    echo "Mozilla/" . rand(4, 5) . ".0 " . iexplorer() . "\n";
-	    break;
-	case 4:
-	    echo "Opera/" . rand(8, 9) . '.' . rand(10, 99) . ' ' . opera() . "\n";
-	    break;
-	case 5:
-	    echo 'Mozilla/5.0' . chrome() . "\n";
-	    break;
+    private static function get_version_ie()
+    {
+        return mt_rand( 7, 9 ) . '.0';
+    }
+
+    private static function get_version_trident()
+    {
+        // IE8 (4.0) to IE11 (7.0).
+        return mt_rand( 4, 7 ) . '.0';
+    }
+
+    private static function get_version_net()
+    {
+        // generic .NET Framework common language run time (CLR) version numbers.
+        $frameworks = array(
+            '2.0.50727',
+            '3.0.4506',
+            '3.5.30729',
+        );
+
+        $i = array_rand( $frameworks, 1 );
+
+        return $frameworks[$i] . '.' . mt_rand( 26, 648 );
+    }
+
+    private static function get_version_safari()
+    {
+        if ( rand( 0, 1 ) == 0 )
+        {
+            $ver = rand( 4, 5 ) . '.' . rand( 0, 1 );
+        }
+        else
+        {
+            $ver = rand( 4, 5 ) . '.0.' . rand( 1, 5 );
+        }
+
+        return $ver;
+    }
+
+    private static function get_version_opera()
+    {
+        return mt_rand( 15, 19 ) . '.0.' . mt_rand( 1147, 1284 ) . mt_rand( 49, 100 );
+    }
+
+    /**
+     * Opera
+     * 
+     * @see: http://dev.opera.com/blog/opera-user-agent-strings-opera-15-and-beyond/
+     */
+    public static function opera( $arch )
+    {
+        $opera = ' OPR/' . self::get_version_opera();
+
+        // WebKit Rendering Engine (WebKit = Backend, Safari = Frontend).
+        $engine = self::get_version_webkit();
+        $webkit = ' AppleWebKit/' . $engine . ' (KHTML, like Gecko)';
+        $chrome = ' Chrome/' . self::get_verison_chrome();
+        $safari = ' Safari/' . $engine;
+
+        switch ( $arch )
+        {
+            case 'lin':
+                return '(X11; Linux {proc}) ' . $webkit . $chrome . $safari . $opera;
+            case 'mac':
+                $osx = self::get_version_osx();
+                return '(Macintosh; U; {proc} Mac OS X ' . $osx . ')' . $webkit . $chrome . $safari . $opera;
+            case 'win':
+                // fall through.
+            default:
+                $nt = self::get_version_nt();
+                return '(Windows NT ' . $nt . '; WOW64) ' . $webkit . $chrome . $safari . $opera;
+        }
+    }    
+
+    /**
+     * Safari
+     *
+     */
+
+    public static function safari( $arch )
+    {
+        $version = ' Version/' . self::get_version_safari();
+
+        // WebKit Rendering Engine (WebKit = Backend, Safari = Frontend).
+        $engine = self::get_version_webkit();
+        $webkit = ' AppleWebKit/' . $engine . ' (KHTML, like Gecko)';
+        $safari = ' Safari/' . $engine;
+
+        switch ( $arch )
+        {
+            case 'mac':
+                $osx = self::get_version_osx();
+                return '(Macintosh; U; {proc} Mac OS X ' . $osx . '; {lang})' . $webkit . $version . $safari;
+            case 'win':
+                // fall through.
+            default:
+                $nt = self::get_version_nt();
+                return '(Windows; U; Windows NT ' . $nt . ')' . $webkit . $version . $safari;
+        }
+
+    }
+
+    /**
+     * Internet Explorer
+     * 
+     * @see: http://msdn.microsoft.com/en-gb/library/ms537503(v=vs.85).aspx
+     */
+    public static function iexplorer( $arch )
+    {
+        $nt = self::get_version_nt();
+        $ie = self::get_version_ie();
+        $trident = self::get_version_trident();
+        $net = self::get_version_net();
+
+        return '(compatible' 
+            . '; MSIE ' . $ie 
+            . '; Windows NT ' . $nt 
+            . '; WOW64' // A 32-bit version of Internet Explorer is running on a 64-bit processor.
+            . '; Trident/' . $trident 
+            . '; .NET CLR ' . $net
+            . ')';
+    }
+
+    /**
+     * Firefox User-Agent
+     *
+     * @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Gecko_user_agent_string_reference
+     */
+    public static function firefox( $arch )
+    {
+        // The release version of Gecko. 
+        $gecko = self::get_version_gecko();
+
+        // On desktop, the gecko trail is fixed.
+        $trail = '20100101';
+
+        $release = 'rv:' . $gecko;
+        $version = 'Gecko/' . $trail . ' Firefox/' . $gecko;
+
+        switch ( $arch )
+        {
+            case 'lin':
+                return '(X11; Linux {proc}; ' . $release . ') ' . $version;
+            case 'mac':
+                $osx = self::get_version_osx();
+                return '(Macintosh; {proc} Mac OS X ' . $osx . '; ' . $release . ') ' . $version;
+            case 'win':
+                // fall through.
+            default:
+                $nt = self::get_version_nt();
+                return '(Windows NT ' . $nt . '; {lang}; ' . $release . ') ' . $version;
+        }
+    }
+
+    public static function chrome( $arch )
+    {
+        $chrome = ' Chrome/' . self::get_verison_chrome();
+
+        // WebKit Rendering Engine (WebKit = Backend, Safari = Frontend).
+        $engine = self::get_version_webkit();
+        $webkit = ' AppleWebKit/' . $engine . ' (KHTML, like Gecko)';
+        $safari = ' Safari/' . $engine;
+
+        switch ( $arch )
+        {
+            case 'lin':
+                return '(X11; Linux {proc}) ' . $webkit . $chrome . $safari;
+            case 'mac':
+                $osx = self::get_version_osx();
+                return '(Macintosh; U; {proc} Mac OS X ' . $osx . ')' . $webkit . $chrome . $safari;
+            case 'win':
+                // fall through.
+            default:
+                $nt = self::get_version_nt();
+                return '(Windows NT ' . $nt . ') ' . $webkit . $chrome . $safari;
+        }
+    }
+
+    public static function random( $lang = array( 'en-US', 'en-GB' ) )
+    {
+        list( $browser, $os ) = self::generate_device();
+
+        // General token that says the browser is Mozilla compatible, 
+        // and is common to almost every browser today.
+        $ua = 'Mozilla/5.0 ' . call_user_func( 'UAgent::' . $browser, $os );
+
+        /*
+        switch ( $browser )
+        {
+            case 'firefox':
+                $ua .= self::firefox( $os );
+                break;
+            case 'iexplorer':
+                $ua .= self::iexplorer( $os );
+                break;
+            case 'chrome':
+                $ua .= self::chrome( $os );
+                break;
+            case 'safari':
+                $ua .= self::safari( $os );
+                break;
+            case 'opera':
+                // NOTE: Opera doesn't begin with the Mozilla/5.0 token.
+                $ua = 'Opera/' . rand( 8, 9 ) . '.' . rand( 10, 99 ) . ' ' . opera( $os );
+                break;
+        }
+        */
+
+        $tags = array(
+            '{proc}' => self::get_processor( $os ),
+            '{lang}' => self::get_language( $lang ),
+        );
+
+        $ua = str_replace( array_keys( $tags ), array_values( $tags ), $ua );
+
+        return $ua;
     }
 }
-
-random_uagent();
 ?>
